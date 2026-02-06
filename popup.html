@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <style>
+    body {
+      font: 13px/1.4 system-ui, sans-serif;
+      min-width: 260px;
+      padding: 10px;
+      background-color: #1f1f1f;
+      color: #ffffff;
+    }
+    button {
+      margin-right: 6px;
+      padding: 6px 10px;
+      background: #3a3a3a;
+      color: #ffffff;
+      border: 1px solid #5a5a5a;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #505050;
+    }
+    .row {
+      margin: 8px 0;
+    }
+    a {
+      color: #9bb7ff;
+    }
+    .hint {
+      color: #cccccc;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <h3>Page Watcher</h3>
+  <div class="row">
+    <button id="start">Start (this tab)</button>
+    <button id="stop">Stop</button>
+    <button id="scan">Scan now</button>
+  </div>
+  <div class="row">
+    <a id="openOptions" href="#">Options…</a>
+  </div>
+  <div class="hint" id="status"></div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+{
+  "manifest_version": 3,
+  "name": "Page Watcher",
+  "version": "1.0.0",
+  "description": "Refresh a page, check an element's text for keywords, and alert with notification/sound.",
+  "permissions": [
+    "storage",
+    "notifications",
+    "alarms",
+    "scripting",
+    "tabs",
+    "offscreen"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "action": {
+    "default_title": "Page Watcher",
+    "default_popup": "popup.html"
+  },
+  "options_page": "options.html",
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "icons": {
+    "16": "icon16.png",
+    "32": "icon32.png",
+    "128": "icon128.png"
+  }
+}

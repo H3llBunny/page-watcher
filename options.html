@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Page Watcher Options</title>
+  <style>
+    body {
+      font: 14px/1.5 system-ui, sans-serif;
+      max-width: 720px;
+      margin: 20px auto;
+      background-color: #1f1f1f; /* dark gray */
+      color: #ffffff;            /* white */
+      padding: 20px;
+    }
+    label {
+      display: block;
+      margin: 10px 0 4px;
+      font-weight: 600;
+      color: #ffffff;
+    }
+    input[type="text"],
+    textarea,
+    input[type="number"] {
+      width: 100%;
+      padding: 6px;
+      border-radius: 4px;
+      border: 1px solid #444;
+      background-color: #2b2b2b;
+      color: #ffffff;
+    }
+    textarea {
+      resize: vertical;
+    }
+    .row {
+      margin-bottom: 12px;
+    }
+    button {
+      padding: 8px 14px;
+      background-color: #3a3a3a;
+      color: white;
+      border: 1px solid #5a5a5a;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #505050;
+    }
+    #status {
+      margin-left: 10px;
+      color: #9bb7ff;
+    }
+  </style>
+</head>
+<body>
+  <h2>Page Watcher – Options</h2>
+
+  <div class="row">
+    <label>URL patterns (one per line)</label>
+    <textarea id="urlPatterns" rows="4"></textarea>
+  </div>
+
+  <div class="row">
+    <label>CSS selector / ID to check</label>
+    <input id="selector" type="text" />
+  </div>
+
+  <div class="row">
+    <label>Keywords (comma-separated)</label>
+    <input id="keywords" type="text" />
+  </div>
+
+  <div class="row">
+    <label>Refresh interval (seconds)</label>
+    <input id="intervalSec" type="number" min="5" />
+  </div>
+
+  <div class="row">
+    <label><input id="soundEnabled" type="checkbox" /> Play sound</label>
+  </div>
+
+  <div class="row">
+    <button id="save">Save</button>
+    <span id="status"></span>
+  </div>
+
+  <script src="options.js"></script>
+</body>
+</html>
