@@ -15,13 +15,7 @@ document.getElementById("stop").addEventListener("click", async () => {
   setStatus("Scanning stopped for this tab.");
 });
 
-document.getElementById("scan").addEventListener("click", async () => {
-  const tabId = await getActiveTabId();
-  await chrome.runtime.sendMessage({ type: "SCAN_NOW", tabId });
-  setStatus("One-time scan triggered.");
-});
-
-document.getElementById("openOptions").addEventListener("click", async () => {
+document.getElementById("options").addEventListener("click", async () => {
   await chrome.runtime.openOptionsPage();
 });
 

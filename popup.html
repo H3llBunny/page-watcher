@@ -10,6 +10,8 @@
       background-color: #1f1f1f;
       color: #ffffff;
     }
+    .row { margin: 8px 0; }
+
     button {
       margin-right: 6px;
       padding: 6px 10px;
@@ -19,31 +21,20 @@
       border-radius: 4px;
       cursor: pointer;
     }
-    button:hover {
-      background: #505050;
-    }
-    .row {
-      margin: 8px 0;
-    }
-    a {
-      color: #9bb7ff;
-    }
-    .hint {
-      color: #cccccc;
-      font-size: 12px;
-    }
+    button:hover { background: #505050; }
+
+    .hint { color: #cccccc; font-size: 12px; }
   </style>
 </head>
 <body>
   <h3>Page Watcher</h3>
+
   <div class="row">
-    <button id="start">Start (this tab)</button>
+    <button id="start">Start</button>
     <button id="stop">Stop</button>
-    <button id="scan">Scan now</button>
+    <button id="options">Options…</button>
   </div>
-  <div class="row">
-    <a id="openOptions" href="#">Options…</a>
-  </div>
+
   <div class="hint" id="status"></div>
 
   <script src="popup.js"></script>

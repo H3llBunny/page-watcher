@@ -2,86 +2,42 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title>Page Watcher Options</title>
+  <title>Page Watcher – Options</title>
   <style>
-    body {
-      font: 14px/1.5 system-ui, sans-serif;
-      max-width: 720px;
-      margin: 20px auto;
-      background-color: #1f1f1f; /* dark gray */
-      color: #ffffff;            /* white */
-      padding: 20px;
+    body { font: 14px/1.5 system-ui, sans-serif; max-width: 720px; margin: 20px auto; background:#1f1f1f; color:#fff; }
+    label { display:block; margin: 12px 0 6px; font-weight:600; }
+    textarea, input[type="text"], input[type="number"] { width:100%; padding:8px; border-radius:4px; border:1px solid #444; background:#2b2b2b; color:#fff; }
+    textarea { resize: vertical; }
+    button { margin-top:12px; padding:8px 14px; background:#3a3a3a; color:#fff; border:1px solid #5a5a5a; border-radius:4px; cursor:pointer; }
+    button:hover { background:#505050; }
+
+    #toast {
+      position: fixed; right: 24px; bottom: 24px;
+      background: #2b2b2b; color: #e6ffe6; border: 1px solid #3b6f3b;
+      padding: 10px 14px; border-radius: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.35);
+      opacity: 0; pointer-events: none; transform: translateY(12px);
+      transition: opacity .25s ease, transform .25s ease;
+      z-index: 9999;
     }
-    label {
-      display: block;
-      margin: 10px 0 4px;
-      font-weight: 600;
-      color: #ffffff;
-    }
-    input[type="text"],
-    textarea,
-    input[type="number"] {
-      width: 100%;
-      padding: 6px;
-      border-radius: 4px;
-      border: 1px solid #444;
-      background-color: #2b2b2b;
-      color: #ffffff;
-    }
-    textarea {
-      resize: vertical;
-    }
-    .row {
-      margin-bottom: 12px;
-    }
-    button {
-      padding: 8px 14px;
-      background-color: #3a3a3a;
-      color: white;
-      border: 1px solid #5a5a5a;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #505050;
-    }
-    #status {
-      margin-left: 10px;
-      color: #9bb7ff;
-    }
+    #toast.show { opacity: 1; transform: translateY(0); }
   </style>
 </head>
 <body>
   <h2>Page Watcher – Options</h2>
 
-  <div class="row">
-    <label>URL patterns (one per line)</label>
-    <textarea id="urlPatterns" rows="4"></textarea>
-  </div>
+  <label for="keywords">Keywords (comma-separated)</label>
+  <input id="keywords" type="text" placeholder="1 - Critical, 2 - High" />
 
-  <div class="row">
-    <label>CSS selector / ID to check</label>
-    <input id="selector" type="text" />
-  </div>
+  <label for="intervalSec">Refresh interval (seconds)</label>
+  <input id="intervalSec" type="number" min="60" step="1" />
 
-  <div class="row">
-    <label>Keywords (comma-separated)</label>
-    <input id="keywords" type="text" />
-  </div>
+  <label><input id="soundEnabled" type="checkbox" /> Play sound</label>
 
-  <div class="row">
-    <label>Refresh interval (seconds)</label>
-    <input id="intervalSec" type="number" min="5" />
-  </div>
-
-  <div class="row">
-    <label><input id="soundEnabled" type="checkbox" /> Play sound</label>
-  </div>
-
-  <div class="row">
+  <div>
     <button id="save">Save</button>
-    <span id="status"></span>
   </div>
+
+  <div id="toast" role="status" aria-live="polite">Saved ✓</div>
 
   <script src="options.js"></script>
 </body>
