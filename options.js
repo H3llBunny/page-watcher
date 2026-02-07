@@ -1,7 +1,7 @@
 const DEFAULTS = {
-  urlPatterns: ["<all_urls>"],
-  selector: "#target",
-  keywords: ["1","2","3"],
+  urlPatterns: ["https://supportmsgc.service-now.com"],
+  selector: "#8adc7cf893ec02507dfd31218bba103e",
+  keywords: ["1","2"],
   intervalSec: 60,
   soundEnabled: true
 };

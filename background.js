@@ -227,7 +227,6 @@ async function contentProbe(selectorOrId, rawKeywords, maxWaitMs = 15000) {
     ? rawKeywords
     : ["1 - Critical", "2 - High"];
 
-  // Look for candidate cells inside the container only
   const cells = container.querySelectorAll("td.vt, td, div, span");
   for (const el of cells) {
     const text = (el.innerText || el.textContent || "").replace(/\s+/g, " ").trim();
