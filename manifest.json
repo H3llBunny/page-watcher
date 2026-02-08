@@ -9,7 +9,8 @@
     "alarms",
     "scripting",
     "tabs",
-    "offscreen"
+    "offscreen",
+    "power"
   ],
   "host_permissions": [
     "<all_urls>"

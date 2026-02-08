@@ -1,17 +1,17 @@
 // --- Debug (turn on/off logs)
-const DEBUG = true;
+const DEBUG = false;
 const log  = (...a) => { if (DEBUG) console.log("[PW]", ...a); };
 const warn = (...a) => { if (DEBUG) console.warn("[PW]", ...a); };
 const err  = (...a) => { if (DEBUG) console.error("[PW]", ...a); };
 
-// --- User config (selector is HARD-CODED here; not read from storage)
 const DEFAULTS = {
   baseUrl: "https://supportmsgc.service-now.com",
   selector: "8adc7cf893ec02507dfd31218bba103e",
-  keywords: ["1 - Critical", "2 - High", "3 - Moderate", "4 - Low"],
+  keywords: ["1 - Critical", "2 - High"],
   intervalSec: 60,                          
   soundEnabled: true,
   desktopNotify: true,
+  keepAwake: true,
   activeTabId: null,
   runCount: 0
 };
@@ -25,6 +25,7 @@ async function getConfig() {
     "intervalSec",
     "soundEnabled",
     "desktopNotify",
+    "keepAwake",
     "activeTabId",
     "runCount",
     "lastNotifiedMap"
@@ -50,6 +51,16 @@ async function setScanBadge(tabId, state) {
   await setBadge(tabId, state, color);
 }
 
+// ---------- keep-awake helpers ----------
+async function keepAwakeOn() {
+  try { await chrome.power.requestKeepAwake('display'); log('keepAwake: ON (display)'); }
+  catch (e) { warn('keepAwakeOn failed', e); }
+}
+async function keepAwakeOff() {
+  try { await chrome.power.releaseKeepAwake(); log('keepAwake: OFF'); }
+  catch (e) { /* ignore */ }
+}
+
 // per-run de-dupe: record a notification for this tab/run
 async function markNotified(tabId, runIndex) {
   const key = String(tabId);
@@ -72,6 +83,7 @@ chrome.runtime.onInstalled.addListener(async () => {
     "intervalSec",
     "soundEnabled",
     "desktopNotify",
+    "keepAwake",
     "activeTabId",
     "runCount",
     "lastNotifiedMap"
@@ -119,6 +131,8 @@ async function startScanning(tabId) {
   });
 
   await setScanBadge(tabId, "ON");
+
+  if (cfg.keepAwake) await keepAwakeOn();
 }
 
 async function stopScanning() {
@@ -126,6 +140,8 @@ async function stopScanning() {
   await chrome.alarms.clear(ALARM_NAME);
   if (cfg.activeTabId != null) await setScanBadge(cfg.activeTabId, "OFF");
   await setConfig({ activeTabId: null, runCount: 0 });
+
+  if (cfg.keepAwake) await keepAwakeOff();
 }
 
 // stop if the tracked tab closes
@@ -161,19 +177,25 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
   await setConfig({ runCount: cfg.runCount + 1 });
 });
 
-// React to Options changes while scanning (interval only; no immediate scan on keywords)
+// React to Options changes while scanning
 chrome.storage.onChanged.addListener(async (changes, area) => {
-  if (area !== "sync" || !changes.intervalSec) return;
+  if (area !== "sync") return;
 
-  const { activeTabId, intervalSec } = await getConfig();
-  if (!activeTabId) return; // only adjust if scanning is active
+  const cfg = await getConfig();
+  if (!cfg.activeTabId) return;
 
-  await chrome.alarms.clear(ALARM_NAME);
-  await chrome.alarms.create(ALARM_NAME, {
-    periodInMinutes: Math.max(intervalSec, 60) / 60
-  });
+  if (changes.intervalSec) {
+    await chrome.alarms.clear(ALARM_NAME);
+    await chrome.alarms.create(ALARM_NAME, {
+      periodInMinutes: Math.max(cfg.intervalSec, 60) / 60
+    });
+    log("intervalSec updated; alarm recreated", { intervalSec: cfg.intervalSec });
+  }
 
-  log("intervalSec updated; alarm recreated", { intervalSec });
+  if (changes.keepAwake) {
+    const next = changes.keepAwake.newValue ?? DEFAULTS.keepAwake;
+    if (next) await keepAwakeOn(); else await keepAwakeOff();
+  }
 });
 
 // ---------- scan cycle (one minute cadence, always refresh) ----------

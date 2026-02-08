@@ -2,11 +2,12 @@ const DEFAULTS = {
   keywords: ["1 - Critical", "2 - High"],
   intervalSec: 60,
   soundEnabled: true,
-  desktopNotify: true
+  desktopNotify: true,
+  keepAwake: true
 };
 
 async function load() {
-  const data = await chrome.storage.sync.get(["keywords", "intervalSec", "soundEnabled", "desktopNotify"]);
+  const data = await chrome.storage.sync.get(["keywords", "intervalSec", "soundEnabled", "desktopNotify", "keepAwake"]);
 
   document.getElementById("keywords").value =
     (data.keywords && data.keywords.length ? data.keywords : DEFAULTS.keywords).join(",");
@@ -19,6 +20,9 @@ async function load() {
 
   document.getElementById("desktopNotify").checked =
     (typeof data.desktopNotify === "boolean") ? data.desktopNotify : DEFAULTS.desktopNotify;
+
+  document.getElementById("keepAwake").checked = 
+    (typeof data.keepAwake === "boolean") ? data.keepAwake : DEFAULTS.keepAwake;
 }
 
 async function save() {
@@ -36,7 +40,7 @@ async function save() {
   const soundEnabled = document.getElementById("soundEnabled").checked;
   const desktopNotify = document.getElementById("desktopNotify").checked;
 
-  await chrome.storage.sync.set({ keywords, intervalSec, soundEnabled, desktopNotify });
+  await chrome.storage.sync.set({ keywords, intervalSec, soundEnabled, desktopNotify, keepAwake });
 
   btn.textContent = "Saved ✓";
   setTimeout(() => { btn.textContent = oldLabel; btn.disabled = false; }, 900);
