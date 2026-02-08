@@ -8,9 +8,10 @@ const err  = (...a) => { if (DEBUG) console.error("[PW]", ...a); };
 const DEFAULTS = {
   baseUrl: "https://supportmsgc.service-now.com",
   selector: "8adc7cf893ec02507dfd31218bba103e",
-  keywords: ["1 - Critical", "2 - High"],
+  keywords: ["1 - Critical", "2 - High", "3 - Moderate", "4 - Low"],
   intervalSec: 60,                          
   soundEnabled: true,
+  desktopNotify: true,
   activeTabId: null,
   runCount: 0
 };
@@ -23,6 +24,7 @@ async function getConfig() {
     "keywords",
     "intervalSec",
     "soundEnabled",
+    "desktopNotify",
     "activeTabId",
     "runCount",
     "lastNotifiedMap"
@@ -69,6 +71,7 @@ chrome.runtime.onInstalled.addListener(async () => {
     "keywords",
     "intervalSec",
     "soundEnabled",
+    "desktopNotify",
     "activeTabId",
     "runCount",
     "lastNotifiedMap"
@@ -267,19 +270,20 @@ async function notifyHit(tab, { matchedText }) {
   const title = "Page Watcher";
   const message = matchedText || "Match found";
 
-  try {
-    await chrome.notifications.create({
-      type: "basic",
-      iconUrl: "icon128.png",
-      title,
-      message,
-      priority: 2
-    });
-  } catch (e) { warn("notify fail", e); }
+  if (cfg.desktopNotify) {
+    try {
+      await chrome.notifications.create({
+        type: "basic",
+        iconUrl: "icon128.png",
+        title,
+        message,
+        priority: 2
+      });
+    } catch (e) { warn("notify fail", e); }
+  }
 
   if (cfg.soundEnabled) await playDing();
 
-  // Keep HIT visible (no auto-revert)
   await setBadge(tab.id, "HIT", "#EA4335");
 }
 
